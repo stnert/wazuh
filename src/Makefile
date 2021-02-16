@@ -889,7 +889,7 @@ endif
 TAR := tar -xf
 GUNZIP := gunzip
 CURL := curl -so
-DEPS_VERSION = 12
+DEPS_VERSION = 10
 RESOURCES_URL := https://packages.wazuh.com/deps/$(DEPS_VERSION)
 CPYTHON := cpython
 ifeq (${PREFIX},/var/ossec)
@@ -918,7 +918,12 @@ endif
 endif
 
 
-EXTERNAL_RES := cJSON $(CPYTHON) curl libdb libffi libyaml openssl procps sqlite zlib audit-userspace msgpack bzip2 libpcre2 libplist
+# Agent dependencies
+EXTERNAL_RES := cJSON curl libdb libffi libyaml openssl procps sqlite zlib audit-userspace msgpack bzip2 libpcre2 libplist
+ifeq (${TARGET},server)
+	# Manager extra dependency
+	EXTERNAL_RES += $(CPYTHON)
+endif
 EXTERNAL_DIR :=  $(EXTERNAL_RES:%=external/%)
 EXTERNAL_TAR := $(EXTERNAL_RES:%=external/%.tar.gz)
 
